@@ -52,8 +52,12 @@ subhalos, and other sources.
 
 \todo{Write this.}
 
+Motivation: study how disrupted wide binaries evolve up to the point where they become
+hard to distinguish from random pairings of field stars. Probably somewhere between
+$10$--$100~\unit{\parsec}$.
+
 %--------------------------------------------------------------------
-\section{Setup and Methods}
+\section{Setup and Dynamics Review}
 \label{sec:setup}
 
 We will consider a disrupted binary-star system consisting of two stars with masses
@@ -77,12 +81,12 @@ The equation of motion of the relative separation is then
   \ddot{\vec{\delta}} &=
     - \nabla \Phi(\vec{x}_1)
     + \nabla \Phi(\vec{x}_2)
-    + \vec{F}(t)  \label{eq:eom1} \\
-  &= \vec{F}_{\mathrm{tidal}} + \vec{F}(t) \quad ,
+    + \vec{f}(t)  \label{eq:eom1} \\
+  &= \vec{f}_{\mathrm{tidal}} + \vec{f}(t) \quad ,
 \end{align}
-where $\vec{F}(t)$ represents the acceleration from anything not captured by the smooth,
+where $\vec{f}(t)$ represents the acceleration from anything not captured by the smooth,
 static potential $\Phi$.
-For example, $\vec{F}(t)$ could represent stochastic perturbations from passing stars,
+For example, $\vec{f}(t)$ could represent stochastic perturbations from passing stars,
 molecular clouds, dark matter substructure, or periodic forcing from the Galactic bar,
 or global secular changes to the potential.
 
@@ -90,7 +94,7 @@ When the relative separation $\vec{\delta}$ is small compared to the scale over 
 the Galactic potential varies, we can Taylor expand the potential difference that
 appears in Equation~\ref{eq:eom1} and keep only the leading-order term,
 \begin{equation}
-  \vec{F}_{\mathrm{tidal}} =
+  \vec{f}_{\mathrm{tidal}} =
     - \nabla \Phi(\vec{x}_1)
     + \nabla \Phi(\vec{x}_2)
     \approx -\mat{T} \cdot \vec{\delta} \quad ,
@@ -119,9 +123,9 @@ For a pair of stars orbiting in the Galactic disk, the smallest relevant scale i
 vertical scale height of the disk, which is around a few hundred parsecs \citep{TODO}.
 In the stellar halo, the relevant scale is the scale radius of the dark matter halo,
 which is significantly larger (of order 10 kpc; \citealt{TODO}).
-Thus, for pairs with separations up to around a parsec to a few tens of parsecs, this
-linearized approximation should be accurate.
-\todo{Do we want to do a better job quantifying the induced error?}
+Thus, for pairs with separations up to a few tens of parsecs, this linearized
+approximation should be accurate.
+\todo{Should we do a better job quantifying the induced error?}
 
 The eigenvalues and eigenvectors of the tidal tensor determine the character of motion
 of the relative separation, as is standard in orbital stability analysis.
@@ -131,24 +135,113 @@ a repulsion that leads to exponential growth of the relative separation along th
 corresponding direction.
 However, in general, the tidal tensor is time-dependent in that it is evaluated at the
 barycenter position of a pair of stars under consideration, and the barycenter orbits
-and changes position within the Galaxy.
+within the Galaxy.
 
-\todo{Two relevant approximations: (1) static tidal tensor in an inertial frame (valid for short times after disruption), (2) shearing sheet / epicyclic approximation (valid for longer times, but assumes circular orbit of barycenter).}
-
-A common approximation for studying the dynamics of pairs or ensembles of stars in the
-Galaxy is to work in the shearing sheet or epicyclic approximation
+A common approximation for simplifying and studying the dynamics of pairs or ensembles
+of stars in the Galaxy is to work in the ``shearing sheet'' or epicyclic approximation
 \citep[e.g.,][]{TODO, Oort}.
 In this approximation, one works in a local Cartesian frame that co-rotates with the
 Galaxy at a fixed radius, assuming that the barycenter of the pair of stars is on
 a circular orbit.
 The tidal tensor is then constant and diagonal, but the equations of motion include
-additional Coriolis and centrifugal terms because of the rotating frame.
+additional fictitious forces because of the rotating reference frame.
+This approximation is mainly valid for stars in the Galactic disk with small
+eccentricities and vertical excursions.
+For this work, we will mainly focus on wide binaries in the disk. \todo{discuss halo
+case in the discussion?} \todo{Audit abstract and make sure it focuses on disk stars.}
+
+\todo{audit signs - I want x to point from Sun to GC, not radially}
+In the shearing sheet approximation, including the (yet unspecified) noise forcing
+$\vec{f}(t)$ from Equation~\ref{eq:eom1}, the equations of motion for the relative
+separation can be written (generically) as
+\begin{align}
+  \vec{\ddot{\delta}} &\approx -\mat{T} \cdot \vec{\delta}
+    - 2 \, \vec{\Omega} \times \vec{\gamma}  % coriolis
+    - \vec{\Omega} \times (\vec{\Omega} \times \vec{\delta})  % centrifugal
+    + \vec{f}(t)
+\end{align}
+where
+\begin{align}
+  \vec{\Omega} &= \transp{\begin{pmatrix}
+    0 & 0 & \Omega
+  \end{pmatrix}}
+\end{align}
+so that the equations of motion can be written in component form as
+\begin{align}
+  \begin{pmatrix}
+    \ddot{\delta}_x \\ \ddot{\delta}_y \\ \ddot{\delta}_z
+  \end{pmatrix} &=
+    \begin{pmatrix}
+      (\Omega^2 - T_{xx}) \, \delta_x + 2 \, \Omega \, \dot{\delta}_y\\
+      (\Omega^2 - T_{yy}) \, \delta_y - 2 \, \Omega \, \dot{\delta}_x\\
+      - T_{zz} \, \delta_z
+    \end{pmatrix} + \vec{f}(t) \quad ,
+\end{align}
+which can also be written in terms of the Oort constants and local frequencies of disk
+orbits \citep[e.g.,][]{TODO}.
+We write it in this form here to make explicit that this can be considered as a
+linear (stochastic) differential equation of the form $\dot{\vec{w}} = \mat{A} \,
+\vec{w} + \mat{B} \, \vec{\eta}(t)$, where $\vec{w}$ is the state vector, $\mat{A}$ is
+the drift matrix, $\mat{B}$ is the noise injection matrix, and $\vec{\eta}(t)$ is a
+time-dependent forcing or stochastic process. \todo{double check terminology here.}
+
+In our setup, the 6-dimensional state vector is
+\begin{equation}
+  \vec{w} = \transp{(\vec{\delta}, \vec{\gamma})}
+\end{equation}
+and for the shearing sheet equations of motion above, the $6 \times 6$ drift matrix is
+given by
+\begin{align}
+  \mat{A} &=
+    \begin{pmatrix}
+      \mat{0} & \mat{I} \\
+      \mat{M} & \mat{C}
+    \end{pmatrix} \\
+  \mat{M} &=
+    \begin{pmatrix}
+      \Omega^2 - T_{xx} & 0 & 0 \\
+      0 & \Omega^2 - T_{yy} & 0 \\
+      0 & 0 & -T_{zz}
+    \end{pmatrix} \\
+  \mat{C} &=
+    \begin{pmatrix}
+      0 & 2 \, \Omega & 0 \\
+      -2 \, \Omega & 0 & 0 \\
+      0 & 0 & 0
+    \end{pmatrix} \quad ,
+\end{align}
+where $\mat{I}$ is the $3 \times 3$ identity matrix and $\mat{0}$ is the $3 \times 3$
+zero matrix, and $\mat{M}$ is sometimes referred to as the effective tidal tensor.
+The forcing term, $\mat{B} \, \vec{\eta}(t)$, must only enter in the velocity terms of
+the state vector, so the $6 \times 3$ noise injection matrix and the 3-dimensional
+forcing vector are given by
+\begin{align}
+  \mat{B} &=
+    \transp{\begin{pmatrix}
+      \mat{0} & \mat{I}
+    \end{pmatrix}}\\
+  \vec{\eta}(t) &= \vec{f}(t) \quad .
+\end{align}
 
 
+\todo{the linearized equations of motion, introduce the forcing / noise as a general time-dependent perturbation with some correlation structure (power spectrum), }
 
 
 %--------------------------------------------------------------------
-% ... more sections
+\section{TODO}
+\label{sec:todo}
+
+\todo{How to solve the driven linear system, how the covariance depends on the forcing spectrum, how the natural frequencies of the shearing sheet dynamics determine which forcing frequencies couple efficiently.}
+
+\todo{Comoving star production assumption, initial conditions, etc. - path to predict observables.}
+
+%--------------------------------------------------------------------
+\section{Results: TODO}
+\label{sec:results-todo}
+
+\todo{Steady-state separation distribution for different assumptions of noise (white noise / passing stars, bar, ISM-like turbulence power law, dark matter subhalos in the heating regime (otherwise would be discrete impulses?)), comoving star production rate assumptions, for different Galactic environments (disk, halo, dwarf galaxy).}
+
+\todo{Comparison to numerical experiments. Can we directly simulate populations of orbits with a range of eccentricities and vertical actions using smolgp to generate draws from the stochastic process?}
 
 %--------------------------------------------------------------------
 \section{Discussion}
