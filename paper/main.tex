@@ -11,8 +11,8 @@
 \begin{document}
 
 \title{
-  The evolution of disrupted wide binary stars: \\
-  The impact of dynamical noise
+  Lost in the Crowd: \\
+  The impact of dynamical noise on the evolution of disrupted wide binary stars
 }
 
 \author[orcid=0000-0003-0872-7098]{Adrian M. Price-Whelan}
@@ -35,7 +35,7 @@ field and stochastic velocity perturbations.
 We model the relative motion as a six-dimensional stochastic process and derive
 closed-form solutions for the time-dependent covariance matrix and marginal
 distributions of observable quantities.
-Our solutions predict BLAH.
+Our solutions predict \todo{BLAH}.
 We validate the analytical results using numerical integration of the stochastic
 differential equations and discuss the domain of validity of our linear approximation.
 This framework provides a foundation for interpreting the growing catalog of comoving
@@ -53,10 +53,99 @@ subhalos, and other sources.
 \todo{Write this.}
 
 %--------------------------------------------------------------------
-\section{Data}
-\label{sec:data}
+\section{Setup and Methods}
+\label{sec:setup}
 
-\todo{Write this.}
+We will consider a disrupted binary-star system consisting of two stars with masses
+$m_1$ and $m_2$ at positions $\vec{x}_1$ and $\vec{x}_2$ in the Galaxy.
+The center of mass position (i.e. the barycenter) of the pair is then given by
+\begin{equation}
+  \vec{x}_{\mathrm{com}} =
+    \frac{m_1 \, \vec{x}_1 + m_2 \, \vec{x}_2}{m_1 + m_2} \quad .
+\end{equation}
+We will assume that the stars orbit within the (assumed smooth and static) Galactic
+gravitational potential $\Phi(\vec{x})$ with Galactocentric velocities $\vec{v}_1$ and
+$\vec{v}_2$ and no mutual gravitational interaction (i.e., they act like two independent
+test particles in the potential).
+We define the relative position and velocity of the two stars as
+\begin{align}
+  \vec{\delta} &= \vec{x}_1 - \vec{x}_2 \\
+  \vec{\gamma} &= \vec{v}_1 - \vec{v}_2 \quad .
+\end{align}
+The equation of motion of the relative separation is then
+\begin{align}
+  \ddot{\vec{\delta}} &=
+    - \nabla \Phi(\vec{x}_1)
+    + \nabla \Phi(\vec{x}_2)
+    + \vec{F}(t)  \label{eq:eom1} \\
+  &= \vec{F}_{\mathrm{tidal}} + \vec{F}(t) \quad ,
+\end{align}
+where $\vec{F}(t)$ represents the acceleration from anything not captured by the smooth,
+static potential $\Phi$.
+For example, $\vec{F}(t)$ could represent stochastic perturbations from passing stars,
+molecular clouds, dark matter substructure, or periodic forcing from the Galactic bar,
+or global secular changes to the potential.
+
+When the relative separation $\vec{\delta}$ is small compared to the scale over which
+the Galactic potential varies, we can Taylor expand the potential difference that
+appears in Equation~\ref{eq:eom1} and keep only the leading-order term,
+\begin{equation}
+  \vec{F}_{\mathrm{tidal}} =
+    - \nabla \Phi(\vec{x}_1)
+    + \nabla \Phi(\vec{x}_2)
+    \approx -\mat{T} \cdot \vec{\delta} \quad ,
+\end{equation}
+where the tidal tensor $\mat{T}$ is defined as
+\begin{equation}
+  T_{ij} \equiv
+    \frac{\partial^2 \Phi}{\partial x_i \partial x_j}
+    \bigg|_{\vec{x} = \vec{x}_{\mathrm{com}}} \quad .
+\end{equation}
+The tidal tensor is symmetric and its eigenvalues and eigenvectors describe the
+principal directions of tidal compression and expansion at the location of the binary's
+barycenter \citep[see, e.g.,][]{Binney:2008}.
+The trace of the tidal tensor is related to the local mass density via Poisson's
+equation,
+\begin{equation}
+  \mathrm{Tr}(\mat{T}) = \nabla^2 \Phi =
+    4 \pi \, G \, \rho(\vec{x}_{\mathrm{com}}) \quad ,
+\end{equation}
+so in regions of low density (e.g., far from the Galactic plane) the tidal field is
+approximately traceless.
+
+This linearized approximation of the equations of motion is valid as long as the
+separation $|\vec{\delta}|$ is small compared to the relevant scales of $\Phi$.
+For a pair of stars orbiting in the Galactic disk, the smallest relevant scale is the
+vertical scale height of the disk, which is around a few hundred parsecs \citep{TODO}.
+In the stellar halo, the relevant scale is the scale radius of the dark matter halo,
+which is significantly larger (of order 10 kpc; \citealt{TODO}).
+Thus, for pairs with separations up to around a parsec to a few tens of parsecs, this
+linearized approximation should be accurate.
+\todo{Do we want to do a better job quantifying the induced error?}
+
+The eigenvalues and eigenvectors of the tidal tensor determine the character of motion
+of the relative separation, as is standard in orbital stability analysis.
+Positive eigenvalues correspond to a restoring force, which leads to oscillatory motion
+along the corresponding eigenvector direction, while negative eigenvalues correspond to
+a repulsion that leads to exponential growth of the relative separation along the
+corresponding direction.
+However, in general, the tidal tensor is time-dependent in that it is evaluated at the
+barycenter position of a pair of stars under consideration, and the barycenter orbits
+and changes position within the Galaxy.
+
+\todo{Two relevant approximations: (1) static tidal tensor in an inertial frame (valid for short times after disruption), (2) shearing sheet / epicyclic approximation (valid for longer times, but assumes circular orbit of barycenter).}
+
+A common approximation for studying the dynamics of pairs or ensembles of stars in the
+Galaxy is to work in the shearing sheet or epicyclic approximation
+\citep[e.g.,][]{TODO, Oort}.
+In this approximation, one works in a local Cartesian frame that co-rotates with the
+Galaxy at a fixed radius, assuming that the barycenter of the pair of stars is on
+a circular orbit.
+The tidal tensor is then constant and diagonal, but the equations of motion include
+additional Coriolis and centrifugal terms because of the rotating frame.
+
+
+
 
 %--------------------------------------------------------------------
 % ... more sections
@@ -65,7 +154,21 @@ subhalos, and other sources.
 \section{Discussion}
 \label{sec:discussion}
 
-\todo{Write this.}
+
+\subsection{Relation to linear response theory} \label{sec:linresp}
+
+The framework we have developed is an application of linear response theory to the
+internal dynamics of wide binaries.
+The transfer function $H(\omega)$ plays the role of a ``susceptibility,'' with poles at
+the natural frequencies of the system.
+Here, the natural frequencies of the system (i.e., the disrupted binary) are simply the
+eigenvalues of the tidal tensor, which determine the characteristic frequencies of
+oscillation or exponential growth of the relative separation.
+In this way, this formalism is analogous to the response theory developed for stellar
+systems \citep[e.g.,][]{Weinberg:1989, Hamilton?, Tremaine?}.
+Perturbations from the noise couple most strongly to orbits that resonate with the
+forcing frequency.
+\todo{more to say?}
 
 %--------------------------------------------------------------------
 \section{Summary and Conclusions}
@@ -85,6 +188,9 @@ subhalos, and other sources.
 
 \begin{acknowledgments}
 \todo{Write this.}
+
+Ryan Rubenzahl
+
 \end{acknowledgments}
 
 % \begin{contribution}
